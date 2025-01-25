@@ -64,21 +64,27 @@ view_option = st.selectbox(
 # Depending on the user's selection, show the appropriate content
 if view_option == "Line Graph":
     st.write("buy form here")
+    
+    data = historical_data()
+    chart_data = pd.DataFrame(data)
+
+    # Use the columns of the data as options for the multiselect
     options = st.multiselect(
-        "What are your favorite colors",
-        ["Green", "Yellow", "Red", "Blue"],
-        ["Yellow", "Red"],
+        "Select lines to display",
+        chart_data.columns.tolist(),
+        chart_data.columns.tolist()  # Default to all columns selected
     )
 
     st.write("You selected:", options)
+
+    data_range = st.slider("Data Range", 0, len(chart_data), 25)
+    st.write("Data Range", data_range)
     
-    data = historical_data()
+    # Filter the data based on selected options and data range
+    filtered_data = chart_data[options].iloc[-data_range:]
 
-    # Generate random data with 20 rows and 3 columns
-    chart_data = pd.DataFrame(data)
-
-    # Display the line chart
-    st.line_chart(chart_data)
+    # Display the line chart with the filtered data
+    st.line_chart(filtered_data)
 
 
 elif view_option == "Candle Graph":

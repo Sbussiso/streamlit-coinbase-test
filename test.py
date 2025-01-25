@@ -1,7 +1,10 @@
+import streamlit as st
 import requests
 import json
 import pandas as pd
 import http
+import plotly.graph_objects as go
+import http.client
 
 def current_price():
     url = 'https://api.coinbase.com/v2/prices/BTC-USD/spot'
@@ -47,13 +50,6 @@ def orderbook():
     asks_df['type'] = 'ask'
     order_book_df = pd.concat([bids_df, asks_df])
     return order_book_df
-
-
-import streamlit as st
-import pandas as pd
-import plotly.graph_objects as go
-import http.client
-import json
 
 # Function to fetch historical crypto data
 def historical_data():
