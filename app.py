@@ -99,6 +99,7 @@ view_option = st.selectbox(
     
 
 if view_option == "Dashboard":
+    st.title("Dashboard Coming Soon")
     
     col1, col2 = st.columns(2)
 

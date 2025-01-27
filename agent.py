@@ -1,4 +1,5 @@
 import os
+import streamlit as st
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_community.tools.tavily_search import TavilySearchResults
@@ -7,16 +8,13 @@ from test import orderbook, historical_data, current_price
 from langchain_core.tools import tool
 from datetime import datetime
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Retrieve API keys from environment variables
-openai_api_key = os.getenv('OPENAI_API_KEY')
-tavily_api_key = os.getenv('TAVILY_API_KEY')
+# Retrieve API keys from Streamlit secrets
+openai_api_key = st.secrets["OPENAI_API_KEY"]
+tavily_api_key = st.secrets["TAVILY_API_KEY"]
 
 # Ensure the variables are set
-assert openai_api_key is not None, "OPENAI_API_KEY is not set in the .env file."
-assert tavily_api_key is not None, "TAVILY_API_KEY is not set in the .env file."
+assert openai_api_key is not None, "OPENAI_API_KEY is not set in Streamlit secrets."
+assert tavily_api_key is not None, "TAVILY_API_KEY is not set in Streamlit secrets."
 
 llm = ChatOpenAI(model="gpt-4o", temperature=0)
 
