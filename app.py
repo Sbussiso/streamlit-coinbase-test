@@ -3,52 +3,22 @@ import pandas as pd
 import numpy as np
 from test import current_price, orderbook, historical_data
 import plotly.graph_objects as go
+from agent import ask_agent
 
 
 from streamlit_extras.metric_cards import style_metric_cards
 
 with st.sidebar:
-    st.title("Trade Panel")
-    
-    
-    # Create a select box to choose which orders to display
-    view_option = st.selectbox(
-        "Select an Order View",
-        ("Buy", "Sell", "Cancel Order")
-    )
 
-    # Depending on the user's selection, show the appropriate content
-    if view_option == "Buy":
-        
-        with st.form("my_form"):
-            st.write("Buy Here")
+    st.title("Order Panel")
 
-            number = st.number_input("Insert a number")
-            # Every form must have a submit button.
-            submitted = st.form_submit_button("Submit")
-            if submitted:
-                st.write("USD", number)
-                st.write("BTC", number) #TODO
-            
-
-
-    elif view_option == "Sell":
-        st.write("sell form here")
-    
-    elif view_option == "Cancel Order":
-        st.write("cancel order form")
-
-    st.markdown("---")
-
-    st.title("Orders")
     # Create a select box to choose which orders to display
     order_book = orderbook()
     st.write(order_book)
-    
+
+    st.write("AI order summary here")
             
         
-
-
 
 st.title("Coinbase Trader")
 st.subheader("Automatically buy and sell bitcoin")
@@ -121,12 +91,11 @@ st.subheader(f"Current Price: {current_price()} USD")
 # Create a select box to choose which orders to display
 view_option = st.selectbox(
     "Select an Order View",
-    ("Gains/Losses")
+    ("Dashboard", "CoinBot")
 )
 
     
-if view_option == "Gains/Losses":
-    
+if view_option == "Dashboard":
     
     col1, col2 = st.columns(2)
 
@@ -134,4 +103,14 @@ if view_option == "Gains/Losses":
     col2.metric(label="Total Loss", value=5000, delta=-1000)
 
     style_metric_cards()
-    
+
+
+if view_option == "CoinBot":
+
+    st.title("Chat with Bot")
+    prompt = st.chat_input("How has bitcoin been performing this week?")
+    if prompt:
+        st.write(f"User:\n {prompt}")
+        result = ask_agent(prompt)
+        st.write("Agent's Response:")
+        st.write(result)
