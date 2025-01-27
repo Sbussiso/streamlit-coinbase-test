@@ -5,8 +5,11 @@ from test import current_price, orderbook, historical_data
 import plotly.graph_objects as go
 from agent import ask_agent
 
-
 from streamlit_extras.metric_cards import style_metric_cards
+
+# Initialize chat_history in session_state
+if 'chat_history' not in st.session_state:
+    st.session_state['chat_history'] = []
 
 with st.sidebar:
 
@@ -15,10 +18,11 @@ with st.sidebar:
     # Create a select box to choose which orders to display
     order_book = orderbook()
     st.write(order_book)
-
-    st.write("AI order summary here")
-            
-        
+    prompt = "Identify trends in the real Bitcoin orderbook that are relevant to crypto trading. You are not a teacher, you only point out trends in the data."
+    if prompt:
+        result = ask_agent(prompt)
+        st.write("Agent's Response:")
+        st.write(result)
 
 st.title("Coinbase Trader")
 st.subheader("Automatically buy and sell bitcoin")
@@ -84,17 +88,16 @@ elif view_option == "Candle Graph":
 
     st.plotly_chart(fig)
 
-
 st.subheader(f"Current Price: {current_price()} USD")
-
+    
 
 # Create a select box to choose which orders to display
 view_option = st.selectbox(
     "Select an Order View",
     ("Dashboard", "CoinBot")
 )
-
     
+
 if view_option == "Dashboard":
     
     col1, col2 = st.columns(2)
@@ -110,7 +113,18 @@ if view_option == "CoinBot":
     st.title("Chat with Bot")
     prompt = st.chat_input("How has bitcoin been performing this week?")
     if prompt:
-        st.write(f"User:\n {prompt}")
+        # Append user input to chat history
+        st.session_state['chat_history'].append({"role": "User", "content": prompt})
+        
+        # Get agent response
         result = ask_agent(prompt)
-        st.write("Agent's Response:")
-        st.write(result)
+        
+        # Append agent response to chat history
+        st.session_state['chat_history'].append({"role": "Agent", "content": result})
+    
+    # Display the chat history with better formatting
+    for chat in st.session_state['chat_history']:
+        if chat["role"] == "User":
+            st.markdown(f"<div style='text-align: right;'><b>User:</b> {chat['content']}</div>", unsafe_allow_html=True)
+        else:
+            st.markdown(f"<div style='text-align: left;'><b>Agent:</b> {chat['content']}</div>", unsafe_allow_html=True)

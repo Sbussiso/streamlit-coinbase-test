@@ -13,8 +13,7 @@ def current_price():
     price = data['data']['amount']
     return price
 
-
-
+@st.cache_data
 def orderbook():
     # Set up a connection to the Coinbase API
     conn = http.client.HTTPSConnection("api.exchange.coinbase.com")
@@ -52,6 +51,7 @@ def orderbook():
     return order_book_df
 
 # Function to fetch historical crypto data
+@st.cache_data
 def historical_data():
     product_id = 'BTC-USD'
     conn = http.client.HTTPSConnection("api.exchange.coinbase.com")

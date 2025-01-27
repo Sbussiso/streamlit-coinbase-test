@@ -3,7 +3,9 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain.agents import initialize_agent, AgentType
-from test import orderbook
+from test import orderbook, historical_data, current_price
+from langchain_core.tools import tool
+from datetime import datetime
 
 # Load environment variables from .env file
 load_dotenv()
@@ -16,15 +18,42 @@ tavily_api_key = os.getenv('TAVILY_API_KEY')
 assert openai_api_key is not None, "OPENAI_API_KEY is not set in the .env file."
 assert tavily_api_key is not None, "TAVILY_API_KEY is not set in the .env file."
 
-llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
+llm = ChatOpenAI(model="gpt-4o", temperature=0)
 
 search_tool = TavilySearchResults(max_results=2)
 
-orderbook_tool = orderbook()
+@tool
+def orderbook_tool():
+    """
+    This tool returns the orderbook for BTC-USD
+    """
+    return orderbook()
 
-tools = [search_tool, orderbook_tool]
+@tool
+def get_current_datetime():
+    """
+    This tool returns the current date and time.
+    """
+    return datetime.now().isoformat()
 
-# Instead of create_openai_functions_agent, use initialize_agent
+@tool
+def historical_data_tool():
+    """
+    This tool returns the historical data for BTC-USD
+    """
+    return historical_data()
+
+@tool
+def current_price_tool():
+    """
+    This tool returns the current price for BTC-USD
+    """
+    return current_price()
+
+# Updated tools list to include the new date and time tool
+tools = [search_tool, orderbook_tool, get_current_datetime, historical_data_tool, current_price_tool]
+
+# Initialize the agent with the updated tools
 agent = initialize_agent(
     tools=tools,
     llm=llm,
@@ -38,7 +67,7 @@ def ask_agent(query):
 
 # Example usage
 if __name__ == '__main__':
-    user_query = "What is LangChain?"
+    user_query = "What is the current date and time?"
     result = ask_agent(user_query)
     print("Agent's Response:")
     print(result)
