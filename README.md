@@ -36,9 +36,6 @@ The project includes the following scripts and modules:
 
 - `agent.py`: This script likely contains the implementation of an agent or bot for automated trading or analysis on the Coinbase exchange.
 - `app.py`: This script may contain the main application logic or a web application for interacting with the project.
-- `coinbase.py`: This module likely contains functions and classes for interacting with the Coinbase API, fetching data, and executing trades.
-- `live_test.py`: This script is likely used for running live tests or simulations against the Coinbase exchange.
-- `test.py`: This script contains unit tests or integration tests for the project.
 
 To run the main application, use the following command:
 
@@ -50,12 +47,6 @@ To run the agent or bot, use the following command:
 
 ```
 python agent.py
-```
-
-For running tests, use the following command:
-
-```
-python test.py
 ```
 
 Refer to the individual script files and their documentation for more specific usage instructions and command-line arguments.
@@ -77,4 +68,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-If you have any questions or need further assistance, please contact the project maintainers at [email@example.com](mailto:email@example.com).
+If you have any questions or need further assistance, please contact the project maintainers at [sbussiso321@gmail.com](mailto:sbussiso321@gmail.com).
